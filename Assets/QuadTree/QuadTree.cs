@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
 
 namespace QuadTree
@@ -30,6 +27,14 @@ namespace QuadTree
 
 		public bool AddObject(object thing, float x, float y, float width, float high)
 		{
+			float xmin = (float)Math.Max(0, x - width * 0.5);
+			float xmax = (float)Math.Min(SceneWidth, x + width * 0.5);
+			float ymin = (float)Math.Max(0, y - high * 0.5);
+			float ymax = (float)Math.Min(SceneHigh, y + high * 0.5);
+			x = (xmin + xmax) * .5f;
+			y = (ymin + ymax) * .5f;
+			width = xmax - xmin;
+			high = ymax - ymin;
 			return root.AddObject(thing, x, y,width, high);
 		}
 
