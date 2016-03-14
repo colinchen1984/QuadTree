@@ -14,14 +14,14 @@ public class ObjectScriptForDebug : MonoBehaviour
 	private float halfHigh = 0.0f;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 
-		Width = Random.Range(10f, 50f);
+		Width = Random.Range(10f, 30);
 		halfWidth = Width*0.5f;
-		High = Random.Range(10f, 50f);
+		High = Random.Range(10f, 30);
 		halfHigh = High * 0.5f;
-		transform.position = new Vector3(Random.Range(0f, 1024f), 0.0f, Random.Range(0f, 1024f));
+		transform.position = new Vector3(Random.Range(-512, 512), 0.0f, Random.Range(-512, 512));
 	}
 	
 	// Update is called once per frame

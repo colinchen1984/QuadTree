@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace QuadTree
 {
@@ -365,42 +366,22 @@ namespace QuadTree
 
 		#region Debug Output
 
-		//private static Color[] colors = new[]{Color.Black, Color.DarkBlue, Color.Aqua, Color.Red, Color.DarkCyan,
-		//	Color.LightPink, Color.DarkOrange, Color.DarkGoldenrod, Color.DarkMagenta};
-		//public void Draw(Graphics graphics)
-		//{
-		//	Pen myPen = new Pen(colors[level % colors.Length], 1.0F);
-		//	graphics.DrawString(level.ToString(), new Font("Arial", 16), myPen.Brush, Rect.Center.X, Rect.Center.Y);
-		//	if (null != objectList)
-		//	{
-		//		foreach (var quadTreedObject in objectList)
-		//		{
-		//			graphics.DrawRectangle(myPen, quadTreedObject.Rect.Center.X - quadTreedObject.Rect.HalfWidth,
-		//				quadTreedObject.Rect.Center.Y - quadTreedObject.Rect.HalfHigh,
-		//				quadTreedObject.Rect.Width, quadTreedObject.Rect.High);
-		//		}
-		//	}
-		//	else
-		//	{
-		//		myPen.Width = 4.0f;
-		//		graphics.DrawLine(myPen, new System.Drawing.Point((int)(Rect.Center.X - Rect.Width * 0.5), (int)Rect.Center.Y),
-		//			new System.Drawing.Point((int)(Rect.Center.X + Rect.Width * 0.5), (int)Rect.Center.Y));
-		//		graphics.DrawLine(myPen, new System.Drawing.Point((int)Rect.Center.X, (int)(Rect.Center.Y - Rect.High * 0.5)),
-		//			new System.Drawing.Point((int)Rect.Center.X, (int)(Rect.Center.Y + Rect.High * 0.5)));
+		private static Color[] colors = new[]{Color.black, Color.blue, Color.cyan, Color.red, Color.green,
+			Color.magenta, Color.gray, Color.yellow};
+		public void OnDrawGizmos()
+		{
+			Gizmos.color = colors[level%colors.Length];
+			Gizmos.DrawLine(new Vector3(Rect.Center.X - Rect.HalfWidth, 0, Rect.Center.Y), new Vector3(Rect.Center.X + Rect.HalfWidth, 0, Rect.Center.Y));
+			Gizmos.DrawLine(new Vector3(Rect.Center.X, 0, Rect.Center.Y - Rect.HalfHigh), new Vector3(Rect.Center.X, 0, Rect.Center.Y + Rect.HalfHigh));
 
-		//		foreach (var quadTreeNode in childrenNode)
-		//		{
-		//			quadTreeNode.Draw(graphics);
-		//		}	
-		//	}
-
-		//	foreach (var quadTreedObject in partialInNodeObject)
-		//	{
-		//		graphics.DrawRectangle(myPen, quadTreedObject.Rect.Center.X - quadTreedObject.Rect.HalfWidth,
-		//			quadTreedObject.Rect.Center.Y - quadTreedObject.Rect.HalfHigh,
-		//			quadTreedObject.Rect.Width, quadTreedObject.Rect.High);
-		//	}
-		//}
+			if (null != childrenNode && null == objectList)
+			{
+				foreach (var quadTreeNode in childrenNode)
+				{
+					quadTreeNode.OnDrawGizmos();
+				}
+			}
+		}
 		#endregion
 	}
 }

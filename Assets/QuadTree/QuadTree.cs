@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace QuadTree
 {
@@ -22,19 +23,19 @@ namespace QuadTree
 		{
 			this.SceneWidth = sceneWidth;
 			this.SceneHigh = sceneHigh;
-			root = new QuadTreeNode(null, 0, sceneWidth >> 1, sceneHigh >> 1, sceneWidth, sceneHigh);
+			root = new QuadTreeNode(null, 0, 0, 0, sceneWidth, sceneHigh);
 		}
 
 		public bool AddObject(object thing, float x, float y, float width, float high)
 		{
-			float xmin = (float)Math.Max(0, x - width * 0.5);
-			float xmax = (float)Math.Min(SceneWidth, x + width * 0.5);
-			float ymin = (float)Math.Max(0, y - high * 0.5);
-			float ymax = (float)Math.Min(SceneHigh, y + high * 0.5);
-			x = (xmin + xmax) * .5f;
-			y = (ymin + ymax) * .5f;
-			width = xmax - xmin;
-			high = ymax - ymin;
+			//float xmin = (float)Math.Max(0, x - width * 0.5);
+			//float xmax = (float)Math.Min(SceneWidth, x + width * 0.5);
+			//float ymin = (float)Math.Max(0, y - high * 0.5);
+			//float ymax = (float)Math.Min(SceneHigh, y + high * 0.5);
+			//x = (xmin + xmax) * .5f;
+			//y = (ymin + ymax) * .5f;
+			//width = xmax - xmin;
+			//high = ymax - ymin;
 			return root.AddObject(thing, x, y,width, high);
 		}
 
@@ -57,43 +58,35 @@ namespace QuadTree
 			}
 		}
 
-		//public void SaveToImage()
-		//{
-		//	Bitmap bitmap = new Bitmap(SceneWidth, SceneHigh, PixelFormat.Format32bppArgb);
-		//	Graphics g = Graphics.FromImage(bitmap);
-
-		//	// Add drawing commands here
-		//	g.Clear(Color.White);
-		//	root.Draw(g);
-		//	Pen myPen = new Pen(Color.Black, 1.0F);
-		//	foreach (var selectedObject in selectedObjects)
-		//	{
-		//		g.DrawString(selectedObject.thing.ToString(), new Font("Arial", 16), 
-		//			myPen.Brush, selectedObject.Rect.Center.X, selectedObject.Rect.Center.Y);
-		//	}
-		//	myPen.Width = 5;
-		//	Action<IRectangle> action = (IRectangle rect) =>
-		//	{
-		//		var points = new System.Drawing.Point[]
-		//		{
-		//			new System.Drawing.Point((int) (rect.Center.X + rect.HalfWidth), (int) (rect.Center.Y + rect.HalfHigh)),
-		//			new System.Drawing.Point((int) (rect.Center.X - rect.HalfWidth), (int) (rect.Center.Y + rect.HalfHigh)),
-		//			new System.Drawing.Point((int) (rect.Center.X - rect.HalfWidth), (int) (rect.Center.Y - rect.HalfHigh)),
-		//			new System.Drawing.Point((int) (rect.Center.X + rect.HalfWidth), (int) (rect.Center.Y - rect.HalfHigh)),
-		//			new System.Drawing.Point((int) (rect.Center.X + rect.HalfWidth), (int) (rect.Center.Y + rect.HalfHigh)),
-		//		};
-		//		g.DrawLines(myPen, points);
-		//	};
-		//	action(selectRectangle);
-		//	myPen.Color = Color.PaleGreen;
-		//	foreach (var quadTreedObject in selectedObjects)
-		//	{
-		//		myPen.Color = quadTreedObject.Rect.IsPartInRectangle(selectRectangle)
-		//			? Color.Black
-		//			: Color.PaleGreen;
-		//		action(quadTreedObject.Rect);
-		//	}
-		//	bitmap.Save(@"./test.png", ImageFormat.Png);
-		//}
+		public void OnDrawGizmos()
+		{
+			if (null == root)
+			{
+				return;
+			}
+			// Add drawing commands here
+			root.OnDrawGizmos();
+			
+			Action<IRectangle> action = (IRectangle rect) =>
+			{
+				Gizmos.DrawLine(new Vector3(rect.Center.X + rect.HalfWidth, rect.Center.Y + rect.HalfHigh), 
+					new Vector3(rect.Center.X - rect.HalfWidth, rect.Center.Y + rect.HalfHigh));
+				Gizmos.DrawLine(new Vector3(rect.Center.X - rect.HalfWidth, rect.Center.Y + rect.HalfHigh),
+						new Vector3(rect.Center.X - rect.HalfWidth, rect.Center.Y - rect.HalfHigh));
+				Gizmos.DrawLine(new Vector3(rect.Center.X - rect.HalfWidth, rect.Center.Y - rect.HalfHigh),
+					new Vector3(rect.Center.X + rect.HalfWidth, rect.Center.Y - rect.HalfHigh));
+				Gizmos.DrawLine(new Vector3(rect.Center.X - rect.HalfWidth, rect.Center.Y + rect.HalfHigh),
+					new Vector3(rect.Center.X + rect.HalfWidth, rect.Center.Y + rect.HalfHigh));
+			};
+			action(selectRectangle);
+			//foreach (var quadTreedObject in selectedObjects)
+			//{
+			//	myPen.Color = quadTreedObject.Rect.IsPartInRectangle(selectRectangle)
+			//		? Color.Black
+			//		: Color.PaleGreen;
+			//	action(quadTreedObject.Rect);
+			//}
+			//bitmap.Save(@"./test.png", ImageFormat.Png);
+		}
 	}
 }
